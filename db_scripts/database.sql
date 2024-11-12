@@ -1,6 +1,6 @@
 DROP DATABASE IF EXISTS cs461_foodtruck;
 CREATE DATABASE cs461_foodtruck;
-\c cs461_tournament_db;
+\c cs461_foodtruck;
 
 -- Clean out the database.
 DO $$
@@ -17,70 +17,70 @@ DO $$
         END IF;
     END $$;
 
-CREATE TABLE Users {
+CREATE TABLE Users (
     userId SERIAL PRIMARY KEY,
     passwordHash VARCHAR(255) NOT NULL,
     email VARCHAR(100) UNIQUE NOT NULL,
     username VARCHAR(20) UNIQUE NOT NULL,
     usertoken VARCHAR(255) UNIQUE
-}
+);
 
-CREATE TABLE Foodtruck {
+CREATE TABLE Foodtruck (
     truckId SERIAL PRIMARY KEY,
     phoneNumber VARCHAR(15) UNIQUE,
     truckname VARCHAR(50) UNIQUE NOT NULL,
     address VARCHAR(100),
     description VARCHAR(255),
-    externalLink VARCHAR(255),
-}
+    externalLink VARCHAR(255)
+);
 
-CREATE TABLE Favorites {
+CREATE TABLE Favorites (
     favoriteId SERIAL PRIMARY KEY,
     truckId INT NOT NULL,
     userId INT NOT NULL,
     FOREIGN KEY (truckId) REFERENCES Foodtruck (truckId),
     FOREIGN KEY (userId) REFERENCES Users (userId)
-}
+);
 
-CREATE TABLE MenuItem {
+CREATE TABLE DietaryRestrictions (
+    restrictionId SERIAL PRIMARY KEY,
+    allergySource VARCHAR(255),
+    spicyLevel INT NOT NULL,
+    halal BOOLEAN DEFAULT FALSE,
+    vegetarian BOOLEAN DEFAULT FALSE,
+    vegan BOOLEAN DEFAULT FALSE
+);
+
+CREATE TABLE MenuItem (
     itemId SERIAL PRIMARY KEY,
     truckId INT NOT NULL,
     itemPrice FLOAT,
     foodName VARCHAR(20) NOT NULL,
     dietaryRestriction INT NOT NULL,
     FOREIGN KEY (dietaryRestriction) REFERENCES DietaryRestrictions (restrictionId)
-}
+);
 
-CREATE TABLE Reviews {
+CREATE TABLE Reviews (
     reviewId SERIAL PRIMARY KEY,
     userId INT NOT NULL,
-    comment VARCHAR(255),
-}
+    comment VARCHAR(255)
+);
 
-CREATE TABLE OpeningHours {
+CREATE TABLE OpeningHours (
     openHourEntryID SERIAL PRIMARY KEY,
     truckId INT NOT NULL,
     dayOfWeek VARCHAR(9) NOT NULL,
     startTime TIME NOT NULL,
-    endTime TIME NOT NULL
+    endTime TIME NOT NULL,
     FOREIGN KEY (truckId) REFERENCES Foodtruck (truckId)
-}
-
-CREATE TABLE DietaryRestrictions {
-    restrictionId SERIAL PRIMARY KEY,
-    allergySource VARCHAR(255),
-    spicyLevel INT NOT NULL,
-    halal BOOLEAN DEFAULT FALSE,
-    vegetarian BOOLEAN DEFAULT FALSE,
-    vegan BOOLEAN DEFAULT FALSE,
-} 
+);
 
 -- Probably not going to end up having users upload photos
-CREATE TABLE Photos {
+CREATE TABLE Photos (
     photoId SERIAL PRIMARY KEY,
     truckId INT NOT NULL,
-    photoSrc BLOB,
+    photoSrc VARCHAR(255) NOT NULL,
     userID INT NOT NULL,
-    FOREIGN KEY (truckId) REFERENCES Foodtruck (truckId),
-}
+    FOREIGN KEY (truckId) REFERENCES Foodtruck (truckId)
+);
 
