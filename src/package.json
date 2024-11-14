@@ -1,6 +1,5 @@
 {
     "name": "CS461-Foodtruck",
-    "type": "module",
     "scripts": {
         "sql": "psql -U postgres -f  ../db_scripts/database.sql",
         "start": "cd ./app; node server.js"

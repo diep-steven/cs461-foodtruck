@@ -1,17 +1,25 @@
-import express from "express";
-import pg from "pg";
-
+const pg = require("pg");
+const express = require("express");
 const app = express();
+
 const port = 3000;
 const hostname = "localhost";
-
-const Pool = pg.Pool;
-
 const env = require("../env.json");
 
-app.use(express.static("public"));
+const Pool = pg.Pool;
+const pool = new Pool(env);
+pool.connect().then(function () {
+  console.log(`Connected to database ${env.database}`);
+});
 
+
+app.use(express.static("public"));
+app.use(express.json());
 
 app.listen(port, hostname, () => {
   console.log(`Listening at: http://${hostname}:${port}`);
+});
+
+app.get("/", (req, res) => {
+  res.render(`index`);
 });
