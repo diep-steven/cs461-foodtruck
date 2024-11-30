@@ -5,7 +5,7 @@ const createUser = async(username, email, password) => {
   try {
     const hash = await argon2.hash(password);
     const query = `
-      INSERT INTO users(username, email, passwordHash)
+      INSERT INTO Users(username, email, passwordHash)
       VALUES ($1, $2, $3)
       RETURNING *`;
     const values = [username, email, hash];
@@ -19,6 +19,68 @@ const createUser = async(username, email, password) => {
   }
 }
 
+const loginUser = async(username, password) => {
+    try {
+        const query = `
+            SELECT * FROM Users
+            WHERE UPPER(username) = $1`;
+            const values = [username.toUpperCase()];
+            const result = await pool.query(query, values);
+            const user = result.rows[0];
+
+            if(!user) {
+                console.log("User doesn't exst");
+                throw new Error("Account does not exist");
+            }
+            const isPassCorrect = await argon2.verify(user.passwordhash, password);
+
+            if (!isPassCorrect) {
+                console.log("Pass not correct");
+                return undefined;
+            }
+            return user;
+    } catch (error) {
+        throw new Error("Login failed");
+    }
+
+}
+
+const updateUser = async (id, details) => {
+  if (!details || Object.keys(details).length === 0) {
+    throw new Error("No details provided");
+  }
+
+  const fields = [];
+  const values = [];
+  let paramNumber = 1;
+
+  Object.keys(details).forEach((key) => {
+    fields.push(`${key} = $${paramNumber}`);
+    values.push(details[key]);
+    paramNumber++;
+  });
+
+  const query = `
+    UPDATE Users 
+    SET ${fields.join(", ")} 
+    WHERE userId = $${paramNumber} 
+    RETURNING *`;
+  values.push(parseInt(id));
+
+  try {
+    const result = await pool.query(query, values);
+    if (result.rows.length === 0) {
+      throw new Error("Account does not exist");
+    }
+    return result.rows;
+  } catch (error) {
+    handleDatabaseError(error, "Could not update user");
+  }
+};
+
+
 module.exports = {
-    createUser
+    createUser,
+    loginUser,
+    updateUser
 }

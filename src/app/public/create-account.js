@@ -7,17 +7,13 @@ let submit = document.getElementById("submit");
 submit.addEventListener("click", createAccount);
 
 
-console.log("hi");
 function createAccount() {
-    console.log("btn submitted");
     let payload = {
         username: usernameInput.value,
         email: emailInput.value,
         password: passInput.value,
         cpassword: cpassInput.value
     };
-
-    console.log("payload: ", payload);
 
         fetch("/api/users/create", {
             method: "POST",
