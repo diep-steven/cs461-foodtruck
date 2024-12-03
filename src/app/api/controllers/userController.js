@@ -22,7 +22,6 @@ const updateToken = async (userId) => {
 
 const createUser = async(req, res) => {
     const { username, email, password, cpassword } = req.body;
-    console.log("request received");
 
     if(!username || !email || !password || !cpassword ) {
         res.status(400);

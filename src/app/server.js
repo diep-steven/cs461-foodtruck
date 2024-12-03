@@ -4,6 +4,7 @@ const path = require("path");
 const pg = require("pg");
 const apiRouter = require("./api/index.js");
 const userService = require("./api/services/userService.js")
+const trucksService = require("./api/services/trucksService.js")
 
 const app = express();
 const port = 3000;
@@ -85,10 +86,20 @@ app.get("/create-account", (req, res) => {
 });
 
 // View Food Trucks page
-app.get("/view-foodtrucks", (req, res) => {
-    res.render("view-foodtrucks", {
-        title: "Foodtruck Table",
+app.get("/view-foodtrucks", async (req, res) => {
+
+    try {
+      const truckData = await trucksService.getAllTrucks();
+
+        res.render("view-foodtrucks", {
+          title: "Foodtruck Table",
+          truckData
     });
+    } catch (error) {
+      console.error("Error getting truck data: ", error)
+      res.status(500).send("Error getting foodtrucks");
+    }
+
 });
 
 // // Example route to fetch food trucks from the database
