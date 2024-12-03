@@ -95,6 +95,21 @@ const updateUser = async (req, res) => {
   }
 }
 
+const getUserByToken = async (req, res) => {
+  const token = req.cookies.user?.token;
+
+  if (!token) {
+    return handleError(res, "No token found", 400);
+  }
+
+  try {
+    const user = await userService.getUserByToken(token);
+    res.status(200).send(user);
+  } catch (error) {
+    return res.status(500).send(error.status);
+  }
+};
+
 const userRouter = express.Router();
 
 userRouter.post("/create", createUser);

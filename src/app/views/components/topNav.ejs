@@ -1,0 +1,59 @@
+<style>
+    /* General Reset */
+    body, ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+        font-family: Arial, sans-serif;
+    }
+
+    header {
+        background-color: #ff5722;
+        color: white;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .logo a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.5rem;
+        font-weight: bold;
+    }
+
+    .nav-links {
+        display: flex;
+        gap: 1rem;
+    }
+
+    .nav-links li {
+        display: inline;
+    }
+
+    .nav-links a {
+        color: white;
+        text-decoration: none;
+        font-size: 1rem;
+    }
+
+    .nav-links a:hover {
+        text-decoration: underline;
+    }
+</style>
+
+    <header>
+        <nav class="navbar">
+            <div class="logo"><a href="/">Food Truck Finder</a></div>
+            <ul class="nav-links">
+                <li><a href="../view-foodtrucks">View Food Trucks</a></li>
+            </ul>
+            <div>
+                Logged in as: <%= userName || 'Guest' %>
+            </div>
+        </nav>
+    </header>

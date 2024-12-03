@@ -78,9 +78,36 @@ const updateUser = async (id, details) => {
   }
 };
 
+const getUserByToken = async (token) => {
+  if (!token) {
+    throw new Error("No token provided for this site");
+  }
+
+  try {
+    const query = `
+      SELECT userid, username, email 
+      FROM Users 
+      WHERE usertoken = $1`;
+    const result = await pool.query(query, [token]);
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    if (result.rows.length > 1) {
+      throw new Error("Non-unique result: multiple users found with the same token.");
+    }
+
+    return result.rows[0];
+  } catch (error) {
+    throw new Error("Problem with database");
+  }
+};
+
 
 module.exports = {
     createUser,
     loginUser,
-    updateUser
+    updateUser,
+    getUserByToken,
 }
