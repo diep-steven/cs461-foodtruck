@@ -10,6 +10,9 @@ const hostname = "localhost";
 // Middleware to serve static files and parse JSON
 app.use(express.static("public"));
 app.use(express.json());
+
+app.set("view engine", "ejs");
+
 app.use("/api", apiRouter);
 
 
@@ -33,34 +36,39 @@ app.get("/api/foodtrucks", async (req, res) => {
 
 // Home page
 app.get("/", (req, res) => {
-    res.header("Content-Type", "text/html");
-    res.sendFile("public/index.html", { root: __dirname });
+    res.render("index", {
+        title: "CS461 Foodtrucks",
+    });
 });
 
 // Login page
 app.get("/login", (req, res) => {
-    res.header("Content-Type", "text/html");
-    res.sendFile(path.join(__dirname, "public", "login.html"));
+    res.render("login", {
+        title: "Login",
+    });
 });
 
 // Create Account page
 app.get("/create-account", (req, res) => {
-    res.header("Content-Type", "text/html");
-    res.sendFile(path.join(__dirname, "public", "create-account.html"));
+    res.render("create-account", {
+        title: "Create account",
+    });
 });
 
 // View Food Trucks page
 app.get("/view-foodtrucks", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "view-foodtrucks.html"));
+    res.render("view-foodtrucks", {
+        title: "Foodtruck Table",
+    });
 });
 
-// Example route to fetch food trucks from the database
-app.get("/api/foodtrucks", async (req, res) => {
-    try {
-        const result = await pool.query("SELECT * FROM Foodtruck");
-        res.status(200).json(result.rows);
-    } catch (err) {
-        console.error("Error fetching food trucks:", err.message);
-        res.status(500).json({ error: "Failed to fetch food trucks" });
-    }
-});
+// // Example route to fetch food trucks from the database
+// app.get("/api/foodtrucks", async (req, res) => {
+//     try {
+//         const result = await pool.query("SELECT * FROM Foodtruck");
+//         res.status(200).json(result.rows);
+//     } catch (err) {
+//         console.error("Error fetching food trucks:", err.message);
+//         res.status(500).json({ error: "Failed to fetch food trucks" });
+//     }
+// });
