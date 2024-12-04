@@ -10,6 +10,8 @@ const app = express();
 const port = 3000;
 const hostname = "localhost";
 
+
+
 // Middleware to serve static files and parse JSON
 app.use(express.static("public"));
 app.use(express.json());
@@ -102,6 +104,37 @@ app.get("/view-foodtrucks", async (req, res) => {
 
 });
 
+
+
+app.get("/foodtruck-menu/:truckId", async (req, res) => {
+  const truckId = req.params.truckId;
+  try {
+      const menuData = await pool.query(
+          "SELECT foodName, itemPrice FROM MenuItem WHERE truckId = $1",
+          [truckId]
+      );
+      res.render("foodtruck-menu", {
+          title: "Food Truck Menu",
+          menuItems: menuData.rows
+      });
+  } catch (error) {
+      console.error("Error fetching menu items:", error);
+      res.status(500).send("Error fetching menu items");
+  }
+});
+
+
+app.get("/menu/:truckId", async (req, res) => {
+  const truckId = req.params.truckId;
+  try {
+      const menuData = await pool.query("SELECT foodName, itemPrice FROM MenuItem WHERE truckId = $1", [truckId]);
+      res.json(menuData.rows);
+  } catch (err) {
+      console.error("Error fetching menu items:", err);
+      res.status(500).json({ error: "Failed to fetch menu items" });
+  }
+});
+
 // // Example route to fetch food trucks from the database
 // app.get("/api/foodtrucks", async (req, res) => {
 //     try {
@@ -112,3 +145,4 @@ app.get("/view-foodtrucks", async (req, res) => {
 //         res.status(500).json({ error: "Failed to fetch food trucks" });
 //     }
 // });
+

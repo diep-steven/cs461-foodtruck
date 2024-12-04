@@ -15,6 +15,7 @@ const getAllTrucks = async () => {
 }
 
 
+
 module.exports = {
     getAllTrucks,
 }

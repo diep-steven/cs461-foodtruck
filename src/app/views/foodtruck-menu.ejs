@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %></title>
+    <link rel="stylesheet" href="foodtruck-menu.css">
+</head>
+<body>
+    <%- include('components/topNav') %>
+    <main>
+        <h2>Food Truck Menu</h2>
+        <div id="foodTruckList">
+            <% truckData.forEach(truck => { %>
+                <div class="foodTruck">
+                    <h3><%= truck.truckname %></h3>
+                    <p>Address: <%= truck.address %></p>
+                    <button onclick="loadMenu('<%= truck.truckid %>')">View Menu</button>
+                    <div id="menu-<%= truck.truckid %>" class="menu-container"></div>
+                </div>
+            <% }) %>
+        </div>
+    </main>
+    <script src="foodtruck-menu.js"></script>
+</body>
+</html>
