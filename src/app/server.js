@@ -102,13 +102,23 @@ app.get("/view-foodtrucks", async (req, res) => {
 
 });
 
-// // Example route to fetch food trucks from the database
-// app.get("/api/foodtrucks", async (req, res) => {
-//     try {
-//         const result = await pool.query("SELECT * FROM Foodtruck");
-//         res.status(200).json(result.rows);
-//     } catch (err) {
-//         console.error("Error fetching food trucks:", err.message);
-//         res.status(500).json({ error: "Failed to fetch food trucks" });
-//     }
-// });
+app.get("/truck/:id/page", async (req, res) => {
+  console.log("test123");
+  const truckId = parseInt(req.params.id);
+
+  try {
+    const truckData = await trucksService.getTruckById(truckId);
+    console.log("truckData", truckData);
+
+    res.render("foodTruck", {
+      title: `Foodtruck`,
+      truckData
+    });
+
+  } catch (error) {
+      console.error("Error fetching truck:", error);
+      res.status(500).send("Error retrieving the truck.");
+  }
+
+});
+

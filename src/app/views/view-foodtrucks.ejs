@@ -22,7 +22,7 @@
                     <tbody id="truckTBody">
                     <% truckData.forEach(truck => { %>
                         <tr>
-                            <td><%= truck.truckname %> </td>
+                            <td><a href="/truck/<%= truck.truckid %>/page"> <%= truck.truckname %></a> </td>
                             <td><%= truck.address %></td>
                         </tr>
                     <% }) %>
