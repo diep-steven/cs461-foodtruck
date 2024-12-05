@@ -98,7 +98,8 @@ const getUserByToken = async (req, res) => {
   const token = req.cookies.user?.token;
 
   if (!token) {
-    return handleError(res, "No token found", 400);
+      console.error("No token found");
+      return res.status(400).send("No token found");
   }
 
   try {
