@@ -27,10 +27,34 @@ const getFoodTruckById = async (req, res) => {
   }
 }
 
+const getTruckMenuById = async (req, res) => {
+    const truckId = parseInt(req.params.id);
+
+    if (!truckId) {
+        return res.status(400).send("Invalid truck ID");
+    }
+
+    try {
+        const truck = await trucksService.getTruckById(truckId);
+        const menuItems = await menuService.getMenuByTruckId(truckId);  // Assuming menuService exists
+
+        if (!truck) {
+            return res.status(404).send("Food truck not found");
+        }
+
+        res.render('menu', {
+            truckData: truck,
+            menuItems: menuItems
+        });
+    } catch (error) {
+        return res.status(500).send("Error retrieving menu");
+    }
+};
 
 const trucksRouter = express.Router();
 
 trucksRouter.get("/getAll", getAllTrucks);
 trucksRouter.get("/getTruck/:id", getFoodTruckById);
+trucksRouter.get("/truck/:id/menu", getTruckMenuById);
 
 module.exports = trucksRouter;
