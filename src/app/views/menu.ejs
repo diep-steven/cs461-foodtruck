@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title><%= truckData.truckname %> Menu</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <%- include('components/topNav') %>
+    <main>
+        <h1>Menu for <%= truckData.truckname %></h1>
+
+        <% if (menuItems && menuItems.length > 0) { %>
+            <ul>
+                <% menuItems.forEach(item => { %>
+                    <li>
+                        <h3><%= item.foodname %></h3>
+                        <p>Price: $<%= item.itemprice %></p>
+                        <p>Dietary Restrictions:</p>
+                        <ul>
+                            <li>Allergy Source: <%= item.allergysource || 'None' %></li>
+                            <li>Spicy Level: <%= item.spicylevel || 'None' %></li>
+                            <li>Halal: <%= item.halal ? 'Yes' : 'No' %></li>
+                            <li>Vegetarian: <%= item.vegetarian ? 'Yes' : 'No' %></li>
+                            <li>Vegan: <%= item.vegan ? 'Yes' : 'No' %></li>
+                        </ul>
+                    </li>
+                <% }); %>
+            </ul>
+        <% } else { %>
+            <p>No menu items available for this truck.</p>
+        <% } %>
+    </main>
+</body>
+</html>

@@ -5,6 +5,7 @@ const pg = require("pg");
 const apiRouter = require("./api/index.js");
 const userService = require("./api/services/userService.js")
 const trucksService = require("./api/services/trucksService.js")
+const menuService = require("./api/services/menuService.js");
 
 const app = express();
 const port = 3000;
@@ -121,4 +122,28 @@ app.get("/truck/:id/page", async (req, res) => {
   }
 
 });
+
+// Route to show the menu for a specific truck
+app.get("/truck/:id/menu", async (req, res) => {
+  const truckId = parseInt(req.params.id); // Get truckId from the URL
+
+  try {
+      // Fetch the truck data (optional) and menu items for this truck
+      const truckData = await trucksService.getTruckById(truckId);
+      const menuItems = await menuService.getMenuItemsByTruckId(truckId); // Assuming you have a service for menu items
+
+      console.log("menuItems", menuItems);
+
+      // Render the menu page and pass the truck data and menu items
+      res.render("menu", {
+          title: `Menu for ${truckData.truckname}`,
+          truckData,
+          menuItems,
+      });
+  } catch (error) {
+      console.error("Error fetching menu data:", error);
+      res.status(500).send("Error retrieving menu items.");
+  }
+});
+
 
