@@ -2,22 +2,43 @@
 <html lang="en">
 
 <head>
-    <title>Login</title>
+    <title>Food Truck</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
     <%- include('components/topNav') %>
-        <main>
+    <main>
         <p>Name: <%= truckData.truckname %></p>
         <p>Address: <%= truckData.address %></p>
         <p>Phone Number: <%= truckData.phonenumber %></p>
         <p>Description: <%= truckData.description %></p>
+        
+        <h2>Opening Hours</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Day of Week</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% openingHours.forEach(hour => { %>
+                    <tr>
+                        <td><%= hour.dayofweek %></td>
+                        <td><%= hour.isclosed ? 'N/A' : hour.starttime.slice(0, 5) %></td>
+                        <td><%= hour.isclosed ? 'N/A' : hour.endtime.slice(0, 5) %></td>
+                        <td><%= hour.isclosed ? 'Closed' : 'Open' %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
 
         <li><a href="/truck/<%= truckData.truckid %>/menu">View Menu</a></li>
-        <li><a href="/truck/<%= truckData.truckid %>/OpeningHours">Opening Hours</a></li>
-        </main>
-        <script src="foodTruck.js"></script>
+    </main>
+    <script src="foodTruck.js"></script>
 </body>
 
 </html>

@@ -7,7 +7,7 @@ const getOpeningHoursByTruckId = async (truckId) => {
             WHERE truckId = $1
         `;
         const result = await pool.query(query, [truckId]);
-        return result.rows;  // Return the menu items along with dietary restrictions
+        return result.rows;  
     } catch (error) {
         console.error("Error fetching opening hours for truck:", error);
         throw new Error("Error fetching opening hours");
