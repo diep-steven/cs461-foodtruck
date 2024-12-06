@@ -105,25 +105,6 @@ app.get("/view-foodtrucks", async (req, res) => {
 
 });
 
-app.get("/truck/:id/page", async (req, res) => {
-  console.log("test123");
-  const truckId = parseInt(req.params.id);
-
-  try {
-    const truckData = await trucksService.getTruckById(truckId);
-    console.log("truckData", truckData);
-
-    res.render("foodTruck", {
-      title: `Foodtruck`,
-      truckData
-    });
-
-  } catch (error) {
-      console.error("Error fetching truck:", error);
-      res.status(500).send("Error retrieving the truck.");
-  }
-
-});
 
 // Route to show the menu for a specific truck
 app.get("/truck/:id/menu", async (req, res) => {
@@ -149,17 +130,29 @@ app.get("/truck/:id/menu", async (req, res) => {
 });
 
 
-app.get("/truck/:id/openingHours", async (req, res) => {
-  const truckId = parseInt(req.params.id);
+app.get("/truck/:id/page", async (req, res) => {
+  const truckId = parseInt(req.params.id);  // Parse the truck ID from the URL
+
   try {
-      const truckData = await trucksService.getTruckById(truckId);
-      const openingHours = await openingHoursService.getOpeningHoursByTruckId(truckId);
+    // Fetch the truck data
+    const truckData = await trucksService.getTruckById(truckId);
 
-      console.log("openingHours", openingHours);
+    // Fetch the opening hours for this truck
+    const openingHours = await openingHoursService.getOpeningHoursByTruckId(truckId);
 
-      res.render('openingHours', { truckData, truckId, openingHours });
+    // Log the fetched data for debugging (optional)
+    console.log("truckData", truckData);
+    console.log("openingHours", openingHours);
+
+    // Render the 'foodTruck' template and pass both truckData and openingHours
+    res.render("foodTruck", { 
+      title: `Foodtruck`, 
+      truckData, 
+      openingHours 
+    });
+
   } catch (error) {
-      console.error("Error fetching opening hours: ", error);
-      res.status(500).send("Error fetching opening hours");
+    console.error("Error fetching truck or opening hours:", error);
+    res.status(500).send("Error fetching truck or opening hours");
   }
 });
