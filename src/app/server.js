@@ -6,6 +6,8 @@ const apiRouter = require("./api/index.js");
 const userService = require("./api/services/userService.js")
 const trucksService = require("./api/services/trucksService.js")
 const menuService = require("./api/services/menuService.js");
+const openingHoursService = require("./api/services/openingHoursService.js");
+
 
 const app = express();
 const port = 3000;
@@ -147,3 +149,17 @@ app.get("/truck/:id/menu", async (req, res) => {
 });
 
 
+app.get("/truck/:id/openingHours", async (req, res) => {
+  const truckId = parseInt(req.params.id);
+  try {
+      const truckData = await trucksService.getTruckById(truckId);
+      const openingHours = await openingHoursService.getOpeningHoursByTruckId(truckId);
+
+      console.log("openingHours", openingHours);
+
+      res.render('openingHours', { truckData, truckId, openingHours });
+  } catch (error) {
+      console.error("Error fetching opening hours: ", error);
+      res.status(500).send("Error fetching opening hours");
+  }
+});

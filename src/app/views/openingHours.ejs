@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Opening Hours for <%= truckData.truckname %></title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <%- include('components/topNav') %>
+    <main>
+        <h1>Opening Hours for <%= truckData.truckname %></h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Day of Week</th>
+                    <th>Opening Time</th>
+                    <th>Closing Time</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                <% openingHours.forEach(hour => { %>
+                    <tr>
+                        <td><%= hour.dayofweek %></td>
+                        <td><%= hour.isclosed ? 'N/A' : hour.starttime.slice(0, 5) %></td>
+                        <td><%= hour.isclosed ? 'N/A' : hour.endtime.slice(0, 5) %></td>
+                        <td><%= hour.isclosed ? 'Closed' : 'Open' %></td>
+                    </tr>
+                <% }); %>
+            </tbody>
+        </table>
+    </main>
+</body>
+</html>
