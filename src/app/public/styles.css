@@ -1,45 +1,187 @@
-/* General Reset */
-body, ul {
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #FFF8E5;
+    color: #4A2C2A;
     margin: 0;
     padding: 0;
-    list-style: none;
-    font-family: Arial, sans-serif;
+    line-height: 1.6;
 }
 
-header {
-    background-color: #ff5722;
-    color: white;
-    padding: 0.5rem 1rem;
+h1, h2, h3 {
+    font-family: 'Lora', serif;
+    color: #D2691E;
+    text-align: center;
+    margin: 20px 0;
 }
 
-.navbar {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.logo a {
-    color: white;
-    text-decoration: none;
-    font-size: 1.5rem;
+h1 {
+    font-size: 3rem;
     font-weight: bold;
 }
 
+h2 {
+    font-size: 2.5rem;
+}
+
+h3 {
+    font-size: 2rem;
+}
+
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.navbar {
+    background-color: #FF7F50;
+    padding: 10px 20px;
+}
+
+.navbar .logo a {
+    font-family: 'Lora', serif;
+    font-size: 2rem;
+    color: white;
+    text-decoration: none;
+}
+
 .nav-links {
-    display: flex;
-    gap: 1rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    text-align: right;
 }
 
 .nav-links li {
     display: inline;
+    margin-left: 20px;
 }
 
 .nav-links a {
-    color: white;
     text-decoration: none;
-    font-size: 1rem;
+    color: white;
+    font-size: 1.2rem;
 }
 
 .nav-links a:hover {
     text-decoration: underline;
 }
+
+.create-account-container,
+.login-container {
+    width: 100%;
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 20px;
+    background-color: #FFF8E5;
+    border-radius: 15px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.create-account-container form,
+.login-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+.create-account-container input[type="text"], 
+.create-account-container input[type="email"],
+.create-account-container input[type="password"],
+.login-container input[type="text"], 
+.login-container input[type="email"],
+.login-container input[type="password"] {
+    margin-bottom: 15px;
+    padding: 10px;
+    font-family: 'Roboto', sans-serif;
+    width: 100%;
+    border: 1px solid #FFDAB9;
+    border-radius: 15px;
+    background-color: #FFF5EE;
+    color: #4A2C2A;
+    box-shadow: inset 0px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+button {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1.2rem;
+    color: #FFF;
+    background-color: #FF7F50;
+    border: none;
+    border-radius: 25px;
+    padding: 10px 20px;
+    margin: 10px 0;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+    background-color: #FF6347;
+    box-shadow: 0px 6px 8px rgba(0, 0, 0, 0.2);
+    transform: translateY(-2px);
+}
+
+a {
+    text-decoration: none;
+    color: #D2691E;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+#foodtruck-list {
+    width: 100%;
+    margin: 0 auto;
+    padding: 20px;
+    text-align: center;
+}
+
+table {
+    width: 100%;
+    margin: 20px 0;
+    border-collapse: collapse;
+    background-color: white;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+table, th, td {
+    border: 1px solid #FFDAB9;
+}
+
+th, td {
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background-color: #FF7F50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background-color: #FFF5EE;
+}
+
+tr:hover {
+    background-color: #FF6347;
+    color: white;
+    cursor: pointer;
+}
+
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    padding: 20px;
+}
+
+form {
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+
+
