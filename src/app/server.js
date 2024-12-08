@@ -186,6 +186,21 @@ app.get("/truck/:id/reviews", async (req, res) => {
   }
 });
 
+app.get("/addTruck", async (req, res) => {
+  try {
+
+   const token = req.cookies?.user?.token || req.headers.authorization?.split(' ')[1];
+    if(!token) {
+     return res.status(401).send("User must be logged in to perform this action.");
+    }
+
+    res.render("addTruck");
+  } catch (error) {
+      console.error("Error loading add truck page:", error);
+      res.status(500).send("Error loading add truck page.");
+  }
+});
+
 // Route to add a new review
 app.post("/truck/:id/addReview", async (req, res) => {
   const truckId = parseInt(req.params.id);

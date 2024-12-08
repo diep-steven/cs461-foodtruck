@@ -51,10 +51,28 @@ const getTruckMenuById = async (req, res) => {
     }
 };
 
+const addTruck = async (req, res) => {
+
+    const payload = req.body;
+    if(!payload.truckname) {
+        console.error("Missing truck name");
+        return res.status(400).send("Missing truck name");
+    }
+
+    try {
+        await trucksService.addTruck(payload);
+    } catch (error) {
+        console.log(error);
+        return res.status(500).send(error);
+    }
+
+}
+
 const trucksRouter = express.Router();
 
 trucksRouter.get("/getAll", getAllTrucks);
 trucksRouter.get("/getTruck/:id", getFoodTruckById);
 trucksRouter.get("/truck/:id/menu", getTruckMenuById);
+trucksRouter.post("/add", addTruck);
 
 module.exports = trucksRouter;

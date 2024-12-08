@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Truck</title>
+    <link type="text/css" href="styles.css">
+</head>
+
+<body>
+    <%- include('components/topNav') %>
+        <main>
+            <div id="truckForm">
+                <label for="truckName">Truck Name (Required):</label>
+                <input type="text" id="truckName" name="truckName" required>
+                <br>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
+                <br>
+                <label for="phoneNum">Phone Number:</label>
+                <input type="text" id="phoneNum" name="phoneNum">
+                <br>
+                <label for="externalLink">External Link:</label>
+                <input type="text" id="externalLink" name="externalLink">
+                <br>
+                <label for="description">Description:</label>
+                <textarea id="description" name="description">
+                </textarea>
+                <br>
+            </div>
+            <div id="hoursForm">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Opening Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mon</td>
+                            <td>
+                                <input type="time" id="monOpen" name="monOpen" value="00:00">
+                                <input type="time" id="monClose" name="monClose" value="00:00">
+                                <label>
+                                    <input type="checkbox" id="monClosed" name="monClosed">
+                                    Closed
+                                    </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tues</td>
+                            <td>
+                                <input type="time" id="tuesOpen" name="tuesOpen" value="00:00">
+                                <input type="time" id="tuesClose" name="tuesClose" value="00:00">
+                                <label>
+                                    <input type="checkbox" id="tuesClosed" name="tuesClosed">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Wed</td>
+                            <td>
+                                <input type="time" id="wedOpen"name="wedOpen" value="00:00">
+                                <input type="time" id="wedClose" name="wedClose" value="00:00">
+                                <label>
+                                    <input type="checkbox" id="wedClosed" name="wedClosed">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Thurs</td>
+                            <td>
+                                <input type="time" id="thurOpen" name="thurOpen" value="00:00">
+                                <input type="time" id="thurClose" name="thurClose" value="00:00">
+                                <label>
+                                    <input type="checkbox" id="thurClosed" name="thurClosed">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fri</td>
+                            <td>
+                                <input type="time" id="friOpen" name="friOpen" value="00:00">
+                                <input type="time" id="friClose" name="friClose" value="00:00">
+                                <label>
+                                    <input type="checkbox" id="friClosed" name="friClosed">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sat</td>
+                            <td>
+                                <input type="time" id="satOpen" name="satOpen" value="00:00">
+                                <input type="time" id="satClose" name="satClose" value="00:00">
+                                <label>
+                                    <input type="checkbox" id="satClosed" name="satClosed">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                            <td>Sun</td>
+                            <td>
+                                <input type="time" id="sunOpen" name="sunOpen" value="00:00">
+                                <input type="time" id="sunClose" name="sunClose" value="00:00">
+                                <label>
+                                    <input type="checkbox" id="sunClosed" name="sunClosed">
+                                    Closed
+                                </label>
+                            </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="submit" id="submit">Submit</button>
+        </main>
+</body>
+<script type="text/javascript" src="addTruck.js"></script>
+
+</html>

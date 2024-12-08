@@ -25,7 +25,7 @@ function createAccount() {
             .then((response) => {
                 if (response.status === 200) {
                     console.log("Account creation successful");
-                    window.location.reload();
+                    window.location.href = "login";
                 }
 
             })

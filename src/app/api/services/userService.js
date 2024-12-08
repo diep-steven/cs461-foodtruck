@@ -1,5 +1,5 @@
 const argon2 = require("argon2");
-const pool = require("./connection.js");
+const { pool }  = require("./connection.js");
 
 const createUser = async(username, email, password) => {
   try {
