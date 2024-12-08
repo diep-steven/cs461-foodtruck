@@ -9,6 +9,8 @@ const menuService = require("./api/services/menuService.js");
 const openingHoursService = require("./api/services/openingHoursService.js");
 const reviewsService = require("./api/services/reviewsService.js");
 
+const methodOverride = require("method-override");
+
 
 const app = express();
 const port = 3000;
@@ -24,6 +26,10 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 app.use("/api", apiRouter);
+
+
+
+app.use(methodOverride("_method")); // Use method-override to support DELETE requests
 
 
 // Server setup
@@ -211,3 +217,16 @@ app.post("/truck/:id/addReview", async (req, res) => {
       res.status(500).send("Error adding review.");
   }
 });
+
+app.delete("/truck/reviews/:reviewId", async (req, res) => {
+  const { reviewId } = req.params;
+
+  try {
+      await reviewsService.deleteReview(reviewId);
+      res.status(200).json({ success: true, message: "Review deleted successfully" });
+  } catch (error) {
+      console.error("Error deleting review:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+

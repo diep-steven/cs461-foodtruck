@@ -15,6 +15,9 @@
             <% reviews.forEach(review => { %>
                 <li>
                     <strong><%= review.username %>:</strong> <%= review.comment %>
+                    <% if (review.username === userName) { %> <!-- Allow delete only if the user wrote the review -->
+                        <button onclick="deleteReview('<%= review.reviewid %>')">Delete</button>
+                    <% } %>
                 </li>
             <% }) %>
         <% } else { %>
@@ -30,12 +33,26 @@
 
         <textarea name="comment" placeholder="Write your review here..." required></textarea>
 
-        
         <button type="submit">Submit Review</button>
     </form>
     
-    
-    
-
+    <script>
+        async function deleteReview(reviewId) {
+            try {
+                const response = await fetch(`/truck/reviews/${reviewId}`, {
+                    method: "DELETE",
+                });
+                if (response.ok) {
+                    alert("Review deleted successfully!");
+                    location.reload(); // Reload the page to update the reviews list
+                } else {
+                    alert("Failed to delete review.");
+                }
+            } catch (error) {
+                console.error("Error deleting review:", error);
+                alert("Error deleting review. Check console for details.");
+            }
+        }
+    </script>
 </body>
 </html>
