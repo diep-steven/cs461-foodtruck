@@ -1,5 +1,5 @@
 // services/reviewsService.js
-const pool = require("./connection.js");
+const { pool }  = require("./connection.js");
 
 // Get reviews for a specific food truck
 const getReviewsByTruckId = async (truckId) => {

@@ -1,4 +1,4 @@
-const pool = require("./connection.js");
+const { pool }  = require("./connection.js");
 
 const getMenuItemsByTruckId = async (truckId) => {
     try {

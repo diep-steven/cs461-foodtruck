@@ -51,4 +51,19 @@ function addTruck() {
     });
 
     console.log(payload);
+    fetch("api/trucks/add", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(payload),
+    }).then((response) => {
+        if(response.status === 200) {
+            console.log("Truck creation successful");
+            window.location.href=`view-fodtrucks`;
+        }
+    })
+    .catch((error) => {
+        console.log(error);
+    });
 }
