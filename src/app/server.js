@@ -166,30 +166,26 @@ app.get("/truck/:id/page", async (req, res) => {
   }
 });
 
-// Route to display reviews for a specific truck
 app.get("/truck/:id/reviews", async (req, res) => {
-  const truckId = parseInt(req.params.id); // Get truckId from the URL
+  const truckId = parseInt(req.params.id);
+
+  // Assuming user ID is stored in session or cookies
+  const userId = req.cookies.user ? req.cookies.user.userid : null;
+
 
   try {
-    // Fetch reviews for this truck
-    const reviews = await reviewsService.getReviewsByTruckId(truckId);
+      const truckData = await trucksService.getTruckById(truckId);
+      const reviews = await reviewsService.getReviewsByTruckId(truckId);
 
-    // Fetch the truck data (optional)
-    const truckData = await trucksService.getTruckById(truckId);
+      console.log("Validated User:", req.cookies.user); // Debug log
+      console.log("User ID:", userId); // Debug log
 
-    // Render the reviews page and pass truck data and reviews
-    res.render("reviews", {
-      title: `Reviews for ${truckData.truckname}`,
-      truckData,
-      reviews,
-      userId: res.locals.userName ? req.cookies.user.userId : null, // Adjust based on your cookie structure
-    });
+      res.render("reviews", { truckData, reviews, userId });
   } catch (error) {
-    console.error("Error fetching reviews:", error);
-    res.status(500).send("Error retrieving reviews.");
+      console.error("Error loading reviews:", error);
+      res.status(500).send("Error loading reviews.");
   }
 });
-
 
 // Route to add a new review
 app.post("/truck/:id/addReview", async (req, res) => {
