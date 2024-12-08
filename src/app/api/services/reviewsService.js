@@ -34,7 +34,22 @@ const addReview = async (truckId, userId, comment) => {
 };
 
 
+// Delete a review by reviewId
+const deleteReview = async (reviewId) => {
+    try {
+        const query = `
+            DELETE FROM Reviews
+            WHERE reviewId = $1;
+        `;
+        await pool.query(query, [reviewId]);
+    } catch (error) {
+        console.error("Error deleting review:", error);
+        throw new Error("Error deleting review");
+    }
+};
+
 module.exports = {
     getReviewsByTruckId,
     addReview,
+    deleteReview,
 };

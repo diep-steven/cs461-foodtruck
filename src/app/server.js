@@ -25,7 +25,6 @@ app.set("view engine", "ejs");
 
 app.use("/api", apiRouter);
 
-
 // Server setup
 app.listen(port, hostname, () => {
     console.log(`Server running at http://${hostname}:${port}/`);
@@ -211,3 +210,16 @@ app.post("/truck/:id/addReview", async (req, res) => {
       res.status(500).send("Error adding review.");
   }
 });
+
+app.delete("/truck/reviews/:reviewId", async (req, res) => {
+  const { reviewId } = req.params;
+
+  try {
+      await reviewsService.deleteReview(reviewId);
+      res.status(200).json({ success: true, message: "Review deleted successfully" });
+  } catch (error) {
+      console.error("Error deleting review:", error);
+      res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+});
+

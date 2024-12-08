@@ -29,10 +29,24 @@ const addReview = async (req, res) => {
 };
 
 
+// Delete a review
+const deleteReview = async (req, res) => {
+    try {
+        const { reviewId } = req.params; // Get review ID from URL
+        await reviewsService.deleteReview(reviewId);
+        res.status(200).json({ success: true, message: "Review deleted successfully" });
+    } catch (error) {
+        console.error("Error deleting review:", error);
+        res.status(500).json({ success: false, message: "Internal Server Error" });
+    }
+};
+
 const reviewsRouter = express.Router();
 
 // Define routes for viewing and adding reviews
 reviewsRouter.get("/getReviews/:truckId", getReviews);
 reviewsRouter.post("/addReview", addReview);
 
+// Define the delete route
+reviewsRouter.delete("/:reviewId", deleteReview); 
 module.exports = reviewsRouter;
