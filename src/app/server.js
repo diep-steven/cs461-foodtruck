@@ -187,7 +187,7 @@ app.get("/truck/:id/reviews", async (req, res) => {
   }
 });
 
-app.get("/truck/add", async (req, res) => {
+app.get("/addTruck", async (req, res) => {
   try {
     res.render("addTruck")
   } catch (error) {
