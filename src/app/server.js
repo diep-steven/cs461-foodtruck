@@ -195,7 +195,7 @@ app.post("/truck/:id/addReview", async (req, res) => {
   console.log("Request Body:", req.body);
 
   if (!userId) {
-      return res.status(400).send("User ID is missing.");
+      return res.status(400).send("You need to Log in");
   }
 
   if (!comment) {

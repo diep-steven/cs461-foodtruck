@@ -5,8 +5,10 @@ const reviewsService = require("../services/reviewsService");
 // Get reviews for a specific truck
 const getReviews = async (req, res) => {
     try {
-        const truckId = req.query.truckId; // Get truckId from query param
+        const { truckId } = req.params;
+        const userId = req.cookies.user ? req.cookies.user.userid : null; // Current user ID
         const reviews = await reviewsService.getReviewsByTruckId(truckId);
+        const truckData = await trucksService.getTruckById(truckId);
         res.render("reviews", { reviews, truckId }); // Pass reviews data to the EJS view
     } catch (error) {
         console.error("Error fetching reviews:", error);
@@ -25,6 +27,7 @@ const addReview = async (req, res) => {
         res.status(500).send("Internal Server Error");
     }
 };
+
 
 const reviewsRouter = express.Router();
 

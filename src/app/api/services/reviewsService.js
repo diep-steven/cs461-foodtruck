@@ -33,7 +33,8 @@ const addReview = async (truckId, userId, comment) => {
     }
 };
 
+
 module.exports = {
     getReviewsByTruckId,
-    addReview
+    addReview,
 };
