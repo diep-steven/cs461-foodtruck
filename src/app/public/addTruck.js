@@ -60,7 +60,7 @@ function addTruck() {
     }).then((response) => {
         if(response.status === 200) {
             console.log("Truck creation successful");
-            window.location.href=`view-fodtrucks`;
+            window.location.href=`view-foodtrucks`;
         }
     })
     .catch((error) => {

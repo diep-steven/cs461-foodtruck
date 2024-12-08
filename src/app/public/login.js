@@ -19,7 +19,7 @@ function loginUser() {
         })
             .then((response) => {
                 if (response.status === 200) {
-                    window.location.reload();
+                    window.location.href = "view-foodtrucks";
                 } else {
                     console.log("Failed to login");
                 }
