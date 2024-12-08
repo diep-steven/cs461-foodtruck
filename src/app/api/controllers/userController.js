@@ -66,7 +66,7 @@ const loginUser = async(req, res) => {
         }
 
         const updatedUser = await updateToken(user.userid);
-        res.cookie("user", { token: updatedUser.usertoken, username: updatedUser.username }, cookieOptions).send();
+        res.cookie("user", { userid: updatedUser.userid, token: updatedUser.usertoken, username: updatedUser.username }, cookieOptions).send();
 
     } catch (error) {
         return res.status(error.statusCode).send(error.message);

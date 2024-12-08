@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reviews for <%= truckData.truckname %></title>
+</head>
+<body>
+    <h1>Reviews for <%= truckData.truckname %></h1>
+
+    <!-- Display All Reviews -->
+    <h3>All Reviews:</h3>
+    <ul>
+        <% if (reviews.length > 0) { %>
+            <% reviews.forEach(review => { %>
+                <li>
+                    <strong><%= review.username %>:</strong> <%= review.comment %>
+                </li>
+            <% }) %>
+        <% } else { %>
+            <p>No reviews yet. Be the first to add one!</p>
+        <% } %>
+    </ul>
+    
+    <!-- Add a Review -->
+    <h3>Add a Review:</h3>
+    <form action="/truck/<%= truckData.truckid %>/addReview" method="POST">
+        <!-- Hidden field to pass userId -->
+        <input type="hidden" name="userId" value="<%= userId %>">
+
+        <textarea name="comment" placeholder="Write your review here..." required></textarea>
+
+        
+        <button type="submit">Submit Review</button>
+    </form>
+    
+    
+    
+
+</body>
+</html>
