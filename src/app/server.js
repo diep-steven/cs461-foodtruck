@@ -187,6 +187,15 @@ app.get("/truck/:id/reviews", async (req, res) => {
   }
 });
 
+app.get("/truck/add", async (req, res) => {
+  try {
+    res.render("addTruck")
+  } catch (error) {
+      console.error("Error loading add truck page:", error);
+      res.status(500).send("Error loading add truck page.");
+  }
+});
+
 // Route to add a new review
 app.post("/truck/:id/addReview", async (req, res) => {
   const truckId = parseInt(req.params.id);

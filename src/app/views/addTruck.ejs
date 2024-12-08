@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Food Truck</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <%- include('components/topNav') %>
+        <main>
+            <div id="truckForm">
+                <label for="truckName">Truck Name:</label>
+                <input type="text" id="truckName" name="truckName" required>
+                <br>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
+                <br>
+                <label for="phoneNum">Phone Number:</label>
+                <input type="text" id="phoneNum" name="phoneNum">
+                <br>
+                <label for="address">Address:</label>
+                <input type="text" id="address" name="address">
+                <br>
+                <label for="externalLink">External Link:</label>
+                <input type="text" id="externalLink" name="externalLink">
+                <br>
+                <label for="description">Description:</label>
+                <textarea id="description" name="description">
+                </textarea>
+                <br>
+            </div>
+            <div id="hoursForm">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Opening Hours</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Mon</td>
+                            <td>
+                                <input type="text" name="monOpen" value="00:00" maxlength="5" size="5">
+                                <input type="text" name="monClose" value="00:00" maxlength="5" size="5">
+                                <label>
+                                    <input type="checkbox" name="monClosed" value="1">
+                                    Closed
+                                    </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Tues</td>
+                            <td>
+                                <input type="text" name="tuesOpen" value="00:00" maxlength="5" size="5">
+                                <input type="text" name="tuesClose" value="00:00" maxlength="5" size="5">
+                                <label>
+                                    <input type="checkbox" name="tuesClosed" value="1">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Wed</td>
+                            <td>
+                                <input type="text" name="wedOpen" value="00:00" maxlength="5" size="5">
+                                <input type="text" name="wedClose" value="00:00" maxlength="5" size="5">
+                                <label>
+                                    <input type="checkbox" name="wedClosed" value="1">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Thurs</td>
+                            <td>
+                                <input type="text" name="thursOpen" value="00:00" maxlength="5" size="5">
+                                <input type="text" name="thursClose" value="00:00" maxlength="5" size="5">
+                                <label>
+                                    <input type="checkbox" name="thursClosed" value="1">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Fri</td>
+                            <td>
+                                <input type="text" name="friOpen" value="00:00" maxlength="5" size="5">
+                                <input type="text" name="friClose" value="00:00" maxlength="5" size="5">
+                                <label>
+                                    <input type="checkbox" name="friClosed" value="1">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Sat</td>
+                            <td>
+                                <input type="text" name="satOpen" value="00:00" maxlength="5" size="5">
+                                <input type="text" name="satClose" value="00:00" maxlength="5" size="5">
+                                <label>
+                                    <input type="checkbox" name="satClosed" value="1">
+                                    Closed
+                                </label>
+                            </td>
+                        </tr>
+                            <td>Sun</td>
+                            <td>
+                                <input type="text" name="sunOpen" value="00:00" maxlength="5" size="5">
+                                <input type="text" name="sunClose" value="00:00" maxlength="5" size="5">
+                                <label>
+                                    <input type="checkbox" name="sunClosed" value="1">
+                                    Closed
+                                </label>
+                            </td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div>
+            <button type="submit" id="submit">Submit</button>
+        </main>
+        <!-- <script src="foodTruck.js"></script> -->
+</body>
+
+</html>
