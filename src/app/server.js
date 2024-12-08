@@ -9,8 +9,6 @@ const menuService = require("./api/services/menuService.js");
 const openingHoursService = require("./api/services/openingHoursService.js");
 const reviewsService = require("./api/services/reviewsService.js");
 
-const methodOverride = require("method-override");
-
 
 const app = express();
 const port = 3000;
@@ -26,11 +24,6 @@ app.use(cookieParser());
 app.set("view engine", "ejs");
 
 app.use("/api", apiRouter);
-
-
-
-app.use(methodOverride("_method")); // Use method-override to support DELETE requests
-
 
 // Server setup
 app.listen(port, hostname, () => {
