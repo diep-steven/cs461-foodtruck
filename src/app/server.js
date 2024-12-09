@@ -117,25 +117,48 @@ app.get("/view-foodtrucks", async (req, res) => {
 // Route to show the menu for a specific truck
 app.get("/truck/:id/menu", async (req, res) => {
   const truckId = parseInt(req.params.id); // Get truckId from the URL
-
   try {
-      // Fetch the truck data (optional) and menu items for this truck
-      const truckData = await trucksService.getTruckById(truckId);
-      const menuItems = await menuService.getMenuItemsByTruckId(truckId); // Assuming you have a service for menu items
+    // Fetch the truck data and menu items for this truck
+    const truckData = await trucksService.getTruckById(truckId);
+    if (!truckData) {
+        return res.status(404).send("Truck not found");
+    }
+    const menuItems = await menuService.getMenuItemsByTruckId(truckId);
+    const dietaryRestrictions = await menuService.getAllDietaryRestrictions();
 
-      console.log("menuItems", menuItems);
-
-      // Render the menu page and pass the truck data and menu items
-      res.render("menu", {
-          title: `Menu for ${truckData.truckname}`,
-          truckData,
-          menuItems,
-      });
+    res.render("menu", {
+        title: `Menu for ${truckData.truckname}`,
+        truckData, // Make sure this contains the truckId
+        menuItems,
+        dietaryRestrictions
+    });
   } catch (error) {
-      console.error("Error fetching menu data:", error);
-      res.status(500).send("Error retrieving menu items.");
+    console.error("Error fetching menu data:", error);
+    res.status(500).send("Error retrieving menu items.");
   }
 });
+
+
+app.post("/truck/:id/addMenuItem", async (req, res) => {
+  const truckId = parseInt(req.params.id); // Get truckId from URL
+  console.log("Received truckId:", truckId);
+  const { foodName, itemPrice, dietaryRestrictionId } = req.body;
+
+  // Validate the inputs
+  if (!foodName || !itemPrice || !dietaryRestrictionId) {
+      return res.status(400).send("All fields are required.");
+  }
+
+  try {
+      await menuService.addMenuItem(truckId, foodName, itemPrice, dietaryRestrictionId);
+      res.redirect(`/truck/${truckId}/menu`);
+  } catch (error) {
+      console.error("Error adding menu item:", error);
+      res.status(500).send("Error adding menu item.");
+  }
+});
+
+
 
 
 app.get("/truck/:id/page", async (req, res) => {
@@ -222,4 +245,6 @@ app.delete("/truck/reviews/:reviewId", async (req, res) => {
       res.status(500).json({ success: false, message: "Internal Server Error" });
   }
 });
+
+
 

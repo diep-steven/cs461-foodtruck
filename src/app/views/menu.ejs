@@ -8,17 +8,69 @@
     <%- include('components/topNav') %>
     <main>
         <h1>Menu for <%= truckData.truckname %></h1>
+        
+        <%= console.log("truckId", truckData.truckId) %>
+        <!-- Form to Add Menu Item -->
+        <form action="/truck/<%= truckData.truckId %>/addMenuItem" method="POST">
 
+
+            <h3>Add Menu Item</h3>
+            <label for="foodName">Food Name:</label>
+            <input type="text" id="foodName" name="foodName" required><br>
+        
+            <label for="itemPrice">Price:</label>
+            <input type="number" step="0.01" id="itemPrice" name="itemPrice" required><br>
+
+            <h4>Dietary Restrictions:</h4>
+
+            <label for="allergySource">Allergy Source:</label>
+            <input type="text" id="allergySource" name="allergySource" placeholder="e.g. Fish"><br>
+
+            <label for="spicyLevel">Spicy Level (1-10):</label>
+            <input type="number" id="spicyLevel" name="spicyLevel" min="1" max="10" placeholder="e.g. 1"><br>
+
+            <label for="halal">Halal:</label>
+            <select id="halal" name="halal" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select><br>
+
+            <label for="vegetarian">Vegetarian:</label>
+            <select id="vegetarian" name="vegetarian" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select><br>
+
+            <label for="vegan">Vegan:</label>
+            <select id="vegan" name="vegan" required>
+                <option value="true">Yes</option>
+                <option value="false">No</option>
+            </select><br>
+        
+            <button type="submit">Add Item</button>
+        </form>
+
+        <!-- Menu Items List -->
         <% if (menuItems && menuItems.length > 0) { %>
             <ul>
                 <% menuItems.forEach(item => { %>
                     <li>
                         <h3><%= item.foodname %></h3>
-                        <p>Price: $<%= item.itemprice %></p>
+                        <p>Price: $<%= item.itemprice.toFixed(2) %></p>
                         <p>Dietary Restrictions:</p>
                         <ul>
-                            <li>Allergy Source: <%= item.allergysource || 'None' %></li>
-                            <li>Spicy Level: <%= item.spicylevel || 'None' %></li>
+                            <% if (item.allergysource) { %>
+                                <li>Allergy Source: <%= item.allergysource %></li>
+                            <% } else { %>
+                                <li>Allergy Source: None</li>
+                            <% } %>
+
+                            <% if (item.spicylevel) { %>
+                                <li>Spicy Level: <%= item.spicylevel %></li>
+                            <% } else { %>
+                                <li>Spicy Level: None</li>
+                            <% } %>
+
                             <li>Halal: <%= item.halal ? 'Yes' : 'No' %></li>
                             <li>Vegetarian: <%= item.vegetarian ? 'Yes' : 'No' %></li>
                             <li>Vegan: <%= item.vegan ? 'Yes' : 'No' %></li>
