@@ -116,26 +116,59 @@ app.get("/view-foodtrucks", async (req, res) => {
 
 // Route to show the menu for a specific truck
 app.get("/truck/:id/menu", async (req, res) => {
-  const truckId = parseInt(req.params.id); // Get truckId from the URL
+  const truckId = parseInt(req.params.id);
 
   try {
-      // Fetch the truck data (optional) and menu items for this truck
-      const truckData = await trucksService.getTruckById(truckId);
-      const menuItems = await menuService.getMenuItemsByTruckId(truckId); // Assuming you have a service for menu items
+    const truckData = await trucksService.getTruckById(truckId);
+    const menuItems = await menuService.getMenuItemsByTruckId(truckId);
+    const dietaryRestrictions = await menuService.createDietaryRestriction(); // Fetch dietary restrictions
 
-      console.log("menuItems", menuItems);
-
-      // Render the menu page and pass the truck data and menu items
-      res.render("menu", {
-          title: `Menu for ${truckData.truckname}`,
-          truckData,
-          menuItems,
-      });
+    res.render("menu", {
+      title: `Menu for ${truckData.truckname}`,
+      truckData,
+      menuItems,
+      dietaryRestrictions
+    });
   } catch (error) {
-      console.error("Error fetching menu data:", error);
-      res.status(500).send("Error retrieving menu items.");
+    console.error("Error fetching menu data:", error);
+    res.status(500).send("Error retrieving menu items.");
   }
 });
+
+
+app.post("/truck/:id/addMenu", async (req, res) => {
+  const truckId = parseInt(req.params.id);
+  console.log("Request Body:", req.body); // Debug log
+
+  const { foodName, itemPrice, allergySource, spicyLevel, halal, vegetarian, vegan } = req.body;
+
+  if (!foodName || !itemPrice) {
+      return res.status(400).send("Missing required fields: foodName and itemPrice.");
+  }
+
+  try {
+      const restrictionId = await menuService.createDietaryRestriction({
+          allergySource,
+          spicyLevel: parseInt(spicyLevel || 0),
+          halal: Boolean(halal),
+          vegetarian: Boolean(vegetarian),
+          vegan: Boolean(vegan),
+      });
+
+      await menuService.addMenuItem({
+          truckId,
+          foodName,
+          itemPrice: parseFloat(itemPrice),
+          dietaryRestrictionId: restrictionId,
+      });
+
+      res.redirect(`/truck/${truckId}/menu`);
+  } catch (error) {
+      console.error("Error adding menu item:", error);
+      res.status(500).send("Error adding menu item.");
+  }
+});
+
 
 
 app.get("/truck/:id/page", async (req, res) => {

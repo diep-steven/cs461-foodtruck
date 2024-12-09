@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Add Menu Item</title>
+    <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+    <%- include('components/topNav') %>
+    <main>
+        <h1>Add Menu Item</h1>
+        <form method="POST" action="/truck/<%= truckId %>/addMenu">
+            <label for="foodName">Food Name:</label>
+            <input type="text" id="foodName" name="foodName" required>
+        
+            <label for="itemPrice">Price:</label>
+            <input type="number" id="itemPrice" name="itemPrice" step="0.01" required>
+        
+            <label for="allergySource">Allergy Source:</label>
+            <input type="text" id="allergySource" name="allergySource">
+        
+            <label for="spicyLevel">Spicy Level:</label>
+            <input type="number" id="spicyLevel" name="spicyLevel">
+        
+            <label for="halal">Halal:</label>
+            <input type="checkbox" id="halal" name="halal">
+        
+            <label for="vegetarian">Vegetarian:</label>
+            <input type="checkbox" id="vegetarian" name="vegetarian">
+        
+            <label for="vegan">Vegan:</label>
+            <input type="checkbox" id="vegan" name="vegan">
+        
+            <button type="submit">Add Menu Item</button>
+        </form>
+        
+           
+    </main>
+</body>
+</html>

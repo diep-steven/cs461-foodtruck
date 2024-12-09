@@ -97,8 +97,6 @@ const addTruck = async (payload) => {
 
     
 }
-
-
 module.exports = {
     getAllTrucks,
     getTruckById,
