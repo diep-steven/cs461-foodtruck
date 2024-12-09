@@ -1,0 +1,33 @@
+<form action="/truck/<%= truckData.truckid %>/menu/<%= item.itemid %>/edit" method="POST">
+    <label for="foodname">Food Name:</label>
+    <input type="text" name="foodname" value="<%= item.foodname %>" required>
+    
+    <label for="itemprice">Price:</label>
+    <input type="number" step="0.01" name="itemprice" value="<%= item.itemprice %>" required>
+    
+    <label for="allergysource">Allergy Source:</label>
+    <input type="text" name="allergysource" value="<%= item.allergysource %>">
+    
+    <label for="spicylevel">Spicy Level:</label>
+    <input type="text" name="spicylevel" value="<%= item.spicylevel %>">
+    
+    <label for="halal">Halal:</label>
+    <select name="halal">
+        <option value="true" <%= item.halal ? 'selected' : '' %>>Yes</option>
+        <option value="false" <%= !item.halal ? 'selected' : '' %>>No</option>
+    </select>
+
+    <label for="vegetarian">Vegetarian:</label>
+    <select name="vegetarian">
+        <option value="true" <%= item.vegetarian ? 'selected' : '' %>>Yes</option>
+        <option value="false" <%= !item.vegetarian ? 'selected' : '' %>>No</option>
+    </select>
+
+    <label for="vegan">Vegan:</label>
+    <select name="vegan">
+        <option value="true" <%= item.vegan ? 'selected' : '' %>>Yes</option>
+        <option value="false" <%= !item.vegan ? 'selected' : '' %>>No</option>
+    </select>
+
+    <button type="submit">Save Changes</button>
+</form>
