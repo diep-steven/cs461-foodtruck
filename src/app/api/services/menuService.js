@@ -92,104 +92,80 @@ async function getMenuItemWithDietaryRestrictions(itemId) {
     return result.rows[0];
 }
 
-async function addMenuItem(truckId, newData) {
-    // Parse spicylevel and ensure it's a number (default to 0 if empty)
-    // Check if spicylevel is passed, otherwise default it to 0
-    let spicyLevel;
-    if (newData.spicylevel) {
-        // Parse spicylevel to an integer, ensuring it's a number
-        spicyLevel = parseInt(newData.spicylevel, 10);
-        if (isNaN(spicyLevel)) {
-            // If it's not a valid number, set to a default value (e.g., 0)
-            spicyLevel = 0;
-        }
-    } else {
-        // Default value if spicylevel is undefined
-        spicyLevel = 0;
+const addMenuItem = async (truckId, newData) => {
+    console.log("Incoming data:", newData); // Debugging line
+
+    // Ensure food name is provided and non-empty
+    if (!newData.foodname || newData.foodname.trim() === '') {
+        throw new Error("Food name is required.");
     }
 
-    console.log("Spicy Level after parsing:", spicyLevel); // Debugging line to check spicyLevel
+    const spicyLevel = parseInt(newData.spicylevel, 10);
+    const parsedSpicyLevel = isNaN(spicyLevel) ? 0 : spicyLevel;
 
-
-
-    // Ensure that booleans for halal, vegetarian, and vegan are correctly parsed
     const halal = newData.halal === 'true';
     const vegetarian = newData.vegetarian === 'true';
     const vegan = newData.vegan === 'true';
 
-    // Insert query for MenuItem
     const insertMenuItemQuery = `
         INSERT INTO MenuItem (truckId, itemPrice, foodName, dietaryRestrictionId)
         VALUES ($1, $2, $3, $4)
         RETURNING itemId;
     `;
-
-    // Insert query for DietaryRestrictions
     const insertDietaryRestrictionsQuery = `
         INSERT INTO DietaryRestrictions (allergySource, spicyLevel, halal, vegetarian, vegan)
         VALUES ($1, $2, $3, $4, $5)
         RETURNING restrictionId;
     `;
 
-    // Values for MenuItem insertion
     const menuItemValues = [
         truckId,
-        parseFloat(newData.itemprice), // Ensure item price is a number
+        parseFloat(newData.itemprice),
         newData.foodname,
-        null // dietaryRestrictionId will be populated after inserting dietary restrictions
+        null,
     ];
-
-    // Values for DietaryRestrictions insertion
     const dietaryRestrictionValues = [
-        newData.allergysource || null, // Null if no allergy source provided
-        spicyLevel, // Use updated spicyLevel
-        halal, // Ensure boolean value for halal
-        vegetarian, // Ensure boolean value for vegetarian
-        vegan, // Ensure boolean value for vegan
+        newData.allergysource || null,
+        parsedSpicyLevel,
+        halal,
+        vegetarian,
+        vegan,
     ];
 
     const client = await pool.connect();
 
     try {
-        // Begin transaction
         await client.query('BEGIN');
+        const { rows: dietaryRows } = await client.query(insertDietaryRestrictionsQuery, dietaryRestrictionValues);
+        const restrictionId = dietaryRows[0].restrictionid;
 
-        // Insert new dietary restriction
-        const dietaryRestrictionsResult = await client.query(insertDietaryRestrictionsQuery, dietaryRestrictionValues);
-        const restrictionId = dietaryRestrictionsResult.rows[0].restrictionId;
+        menuItemValues[3] = restrictionId;
 
-        // Insert new menu item and associate it with the dietary restriction
-        menuItemValues[3] = restrictionId; // Set the dietaryRestrictionId in menu item values
+        const { rows: menuRows } = await client.query(insertMenuItemQuery, menuItemValues);
+        const newItemId = menuRows[0].itemid;
 
-        const menuItemResult = await client.query(insertMenuItemQuery, menuItemValues);
-        const newItemId = menuItemResult.rows[0].itemId;
-
-        // Commit transaction
         await client.query('COMMIT');
 
-        
         return {
             itemId: newItemId,
             truckId,
             foodName: newData.foodname,
-            itemPrice: newData.itemprice,
+            itemPrice: parseFloat(newData.itemprice),
             dietaryRestrictionId: restrictionId,
         };
     } catch (error) {
-        
         await client.query('ROLLBACK');
         console.error("Error adding new menu item:", error);
         throw error;
     } finally {
         client.release();
     }
-}
-
+};
 
 module.exports = {
     getMenuItemsByTruckId,
     getMenuItemById,
     updateMenuItem,
     addMenuItem,
-    getMenuItemWithDietaryRestrictions
+    getMenuItemWithDietaryRestrictions,
 };
