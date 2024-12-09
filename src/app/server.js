@@ -282,3 +282,68 @@ app.post("/truck/:truckId/menu/:itemId/edit", async (req, res) => {
       res.status(500).send("Error updating menu item.");
   }
 });
+
+// Route to render the 'Add Menu' form for a specific truck
+app.get("/truck/:truckId/menu/add", async (req, res) => {
+  const truckId = parseInt(req.params.truckId); // Get truckId from the URL
+
+  try {
+      // Fetch the truck data for this truck ID (optional for displaying truck name, etc.)
+      const truckData = await trucksService.getTruckById(truckId);
+
+      // Render the addMenu form for this truck
+      res.render("addMenu", {
+          title: `Add Menu Item for ${truckData.truckname}`,
+          truckData, // Pass truck data to the form so we can show the truck name or ID if necessary
+      });
+  } catch (error) {
+      console.error("Error fetching truck data:", error);
+      res.status(500).send("Error retrieving truck data for adding menu item.");
+  }
+});
+
+
+// Route to handle adding a new menu item for a specific truck
+app.post("/truck/:truckId/menu/add", async (req, res) => {
+  const truckId = parseInt(req.params.truckId, 10); // Ensure truckId is a number
+  console.log("Incoming Truck ID:", truckId);
+  console.log("Request Body:", req.body); // Log the request body for debugging
+
+  // Extract values from the request body
+  const {
+      foodname,       // Food name (string)
+      itemprice,      // Item price (string or number)
+      allergysource,  // Allergy source (string)
+      spicylevel,     // Spicy level (string or number)
+      halal,          // Halal (string: 'true' or 'false')
+      vegetarian,     // Vegetarian (string: 'true' or 'false')
+      vegan           // Vegan (string: 'true' or 'false')
+  } = req.body;
+
+  try {
+      // Validate required fields
+      if (!foodname || foodname.trim() === "") {
+          throw new Error("Food name is required.");
+      }
+      if (!itemprice || isNaN(parseFloat(itemprice))) {
+          throw new Error("Valid item price is required.");
+      }
+
+      // Call the menu service to add the menu item
+      await menuService.addMenuItem(truckId, {
+          foodname: foodname.trim(), // Trim extra whitespace
+          itemprice: parseFloat(itemprice), // Ensure price is a number
+          allergysource: allergysource || null, // Null if not provided
+          spicylevel: parseInt(spicylevel, 10) || 0, // Default to 0 if undefined or NaN
+          halal: halal === "true", // Convert string to boolean
+          vegetarian: vegetarian === "true", // Convert string to boolean
+          vegan: vegan === "true", // Convert string to boolean
+      });
+
+      // Redirect to the truck's menu page after successful addition
+      res.redirect(`/truck/${truckId}/menu`);
+  } catch (error) {
+      console.error("Error adding menu item:", error.message);
+      res.status(500).send(`Error adding menu item: ${error.message}`);
+  }
+});

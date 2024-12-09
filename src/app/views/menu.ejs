@@ -8,6 +8,9 @@
     <%- include('components/topNav') %>
     <main>
         <h1>Menu for <%= truckData.truckname %></h1>
+        <!-- Link to Add Menu Item -->
+        <a href="/truck/<%= truckData.truckid %>/menu/add" class="add-menu-item-link">Add Menu Item</a>
+
 
         <% if (menuItems && menuItems.length > 0) { %>
             <ul>

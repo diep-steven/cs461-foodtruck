@@ -92,9 +92,80 @@ async function getMenuItemWithDietaryRestrictions(itemId) {
     return result.rows[0];
 }
 
+const addMenuItem = async (truckId, newData) => {
+    console.log("Incoming data:", newData); // Debugging line
+
+    // Ensure food name is provided and non-empty
+    if (!newData.foodname || newData.foodname.trim() === '') {
+        throw new Error("Food name is required.");
+    }
+
+    const spicyLevel = parseInt(newData.spicylevel, 10);
+    const parsedSpicyLevel = isNaN(spicyLevel) ? 0 : spicyLevel;
+
+    const halal = newData.halal === 'true';
+    const vegetarian = newData.vegetarian === 'true';
+    const vegan = newData.vegan === 'true';
+
+    const insertMenuItemQuery = `
+        INSERT INTO MenuItem (truckId, itemPrice, foodName, dietaryRestrictionId)
+        VALUES ($1, $2, $3, $4)
+        RETURNING itemId;
+    `;
+    const insertDietaryRestrictionsQuery = `
+        INSERT INTO DietaryRestrictions (allergySource, spicyLevel, halal, vegetarian, vegan)
+        VALUES ($1, $2, $3, $4, $5)
+        RETURNING restrictionId;
+    `;
+
+    const menuItemValues = [
+        truckId,
+        parseFloat(newData.itemprice),
+        newData.foodname,
+        null,
+    ];
+    const dietaryRestrictionValues = [
+        newData.allergysource || null,
+        parsedSpicyLevel,
+        halal,
+        vegetarian,
+        vegan,
+    ];
+
+    const client = await pool.connect();
+
+    try {
+        await client.query('BEGIN');
+        const { rows: dietaryRows } = await client.query(insertDietaryRestrictionsQuery, dietaryRestrictionValues);
+        const restrictionId = dietaryRows[0].restrictionid;
+
+        menuItemValues[3] = restrictionId;
+
+        const { rows: menuRows } = await client.query(insertMenuItemQuery, menuItemValues);
+        const newItemId = menuRows[0].itemid;
+
+        await client.query('COMMIT');
+
+        return {
+            itemId: newItemId,
+            truckId,
+            foodName: newData.foodname,
+            itemPrice: parseFloat(newData.itemprice),
+            dietaryRestrictionId: restrictionId,
+        };
+    } catch (error) {
+        await client.query('ROLLBACK');
+        console.error("Error adding new menu item:", error);
+        throw error;
+    } finally {
+        client.release();
+    }
+};
+
 module.exports = {
     getMenuItemsByTruckId,
     getMenuItemById,
     updateMenuItem,
-    getMenuItemWithDietaryRestrictions
+    addMenuItem,
+    getMenuItemWithDietaryRestrictions,
 };
