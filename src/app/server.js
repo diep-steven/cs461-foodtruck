@@ -238,3 +238,47 @@ app.delete("/truck/reviews/:reviewId", async (req, res) => {
   }
 });
 
+app.get("/truck/:truckId/menu/:itemId/edit", async (req, res) => {
+  const truckId = parseInt(req.params.truckId);
+  const itemId = parseInt(req.params.itemId);
+
+
+  try {
+      const item = await menuService.getMenuItemById(itemId);
+      const truckData = await trucksService.getTruckById(truckId);
+
+      if (!item) {
+          return res.status(404).send("Menu item not found.");
+      }
+
+      res.render("editMenu", { truckData, item });
+  } catch (error) {
+      console.error("Error fetching menu item:", error);
+      res.status(500).send("Error displaying the edit form.");
+  }
+});
+
+app.post("/truck/:truckId/menu/:itemId/edit", async (req, res) => {
+  const truckId = parseInt(req.params.truckId);
+  const itemId = parseInt(req.params.itemId);
+  const { foodname, itemprice, allergysource, spicylevel, halal, vegetarian, vegan } = req.body;
+
+  console.log("Request Body:1111111", req.body);
+
+  try {
+      await menuService.updateMenuItem(itemId, truckId, {
+          foodname,
+          itemprice,
+          allergysource,
+          spicylevel,
+          halal: halal === 'true',
+          vegetarian: vegetarian === 'true',
+          vegan: vegan === 'true',
+      });
+
+      res.redirect(`/truck/${truckId}/menu`);
+  } catch (error) {
+      console.error("Error updating menu item:", error);
+      res.status(500).send("Error updating menu item.");
+  }
+});

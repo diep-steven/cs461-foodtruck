@@ -23,6 +23,8 @@
                             <li>Vegetarian: <%= item.vegetarian ? 'Yes' : 'No' %></li>
                             <li>Vegan: <%= item.vegan ? 'Yes' : 'No' %></li>
                         </ul>
+
+                        <a href="/truck/<%= truckData.truckid %>/menu/<%= item.itemid %>/edit">Edit</a>
                     </li>
                 <% }); %>
             </ul>
