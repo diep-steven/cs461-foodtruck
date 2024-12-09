@@ -93,9 +93,9 @@ async function getMenuItemWithDietaryRestrictions(itemId) {
 }
 
 const addMenuItem = async (truckId, newData) => {
-    console.log("Incoming data:", newData); // Debugging line
+    console.log("Incoming data:", newData); 
 
-    // Ensure food name is provided and non-empty
+
     if (!newData.foodname || newData.foodname.trim() === '') {
         throw new Error("Food name is required.");
     }
