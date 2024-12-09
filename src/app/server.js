@@ -282,3 +282,51 @@ app.post("/truck/:truckId/menu/:itemId/edit", async (req, res) => {
       res.status(500).send("Error updating menu item.");
   }
 });
+
+// Route to render the 'Add Menu' form for a specific truck
+app.get("/truck/:truckId/menu/add", async (req, res) => {
+  const truckId = parseInt(req.params.truckId); // Get truckId from the URL
+
+  try {
+      // Fetch the truck data for this truck ID (optional for displaying truck name, etc.)
+      const truckData = await trucksService.getTruckById(truckId);
+
+      // Render the addMenu form for this truck
+      res.render("addMenu", {
+          title: `Add Menu Item for ${truckData.truckname}`,
+          truckData, // Pass truck data to the form so we can show the truck name or ID if necessary
+      });
+  } catch (error) {
+      console.error("Error fetching truck data:", error);
+      res.status(500).send("Error retrieving truck data for adding menu item.");
+  }
+});
+
+
+// Route to handle adding a new menu item for a specific truck
+app.post("/truck/:truckId/menu/add", async (req, res) => {
+  const truckId = parseInt(req.params.truckId); // Get truckId from the URL
+  const { foodname, itemprice, allergysource, spicylevel, halal, vegetarian, vegan } = req.body;
+
+  console.log("Request Body:", req.body); // Log the request body to check the incoming data
+
+  try {
+      // Call the menuService to add the menu item to the database
+      await menuService.addMenuItem({
+          truckId,
+          foodName: foodname,
+          itemPrice: parseFloat(itemprice), // Ensure price is stored as a number
+          allergySource: allergysource,
+          spicyLevel: parseInt(spicylevel, 10),
+          halal: halal === 'true',  // Convert string to boolean
+          vegetarian: vegetarian === 'true',
+          vegan: vegan === 'true',
+      });
+
+      // After adding the menu item, redirect to the truck's menu page
+      res.redirect(`/truck/${truckId}/menu`);
+  } catch (error) {
+      console.error("Error adding menu item:", error);
+      res.status(500).send("Error adding menu item.");
+  }
+});
