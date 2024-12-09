@@ -5,11 +5,6 @@ const getMenuItems = async (req, res) => {
     try {
         const truckId = req.query.truckId; // Example: Pass truckId as a query param
         const menuItems = await menuService.getMenuItems(truckId);
-        const dietaryRestrictions = await menuService.getAllDietaryRestrictions();
-
-        console.log('Dietary Restrictions:', dietaryRestrictions);
-
-        
         res.render('menu', { 
             menuItems, 
             dietaryRestrictions  // Pass dietaryRestrictions to the view

@@ -117,48 +117,25 @@ app.get("/view-foodtrucks", async (req, res) => {
 // Route to show the menu for a specific truck
 app.get("/truck/:id/menu", async (req, res) => {
   const truckId = parseInt(req.params.id); // Get truckId from the URL
-  try {
-    // Fetch the truck data and menu items for this truck
-    const truckData = await trucksService.getTruckById(truckId);
-    if (!truckData) {
-        return res.status(404).send("Truck not found");
-    }
-    const menuItems = await menuService.getMenuItemsByTruckId(truckId);
-    const dietaryRestrictions = await menuService.getAllDietaryRestrictions();
-
-    res.render("menu", {
-        title: `Menu for ${truckData.truckname}`,
-        truckData, // Make sure this contains the truckId
-        menuItems,
-        dietaryRestrictions
-    });
-  } catch (error) {
-    console.error("Error fetching menu data:", error);
-    res.status(500).send("Error retrieving menu items.");
-  }
-});
-
-
-app.post("/truck/:id/addMenuItem", async (req, res) => {
-  const truckId = parseInt(req.params.id); // Get truckId from URL
-  console.log("Received truckId:", truckId);
-  const { foodName, itemPrice, dietaryRestrictionId } = req.body;
-
-  // Validate the inputs
-  if (!foodName || !itemPrice || !dietaryRestrictionId) {
-      return res.status(400).send("All fields are required.");
-  }
 
   try {
-      await menuService.addMenuItem(truckId, foodName, itemPrice, dietaryRestrictionId);
-      res.redirect(`/truck/${truckId}/menu`);
+      // Fetch the truck data (optional) and menu items for this truck
+      const truckData = await trucksService.getTruckById(truckId);
+      const menuItems = await menuService.getMenuItemsByTruckId(truckId); // Assuming you have a service for menu items
+
+      console.log("menuItems", menuItems);
+
+      // Render the menu page and pass the truck data and menu items
+      res.render("menu", {
+          title: `Menu for ${truckData.truckname}`,
+          truckData,
+          menuItems,
+      });
   } catch (error) {
-      console.error("Error adding menu item:", error);
-      res.status(500).send("Error adding menu item.");
+      console.error("Error fetching menu data:", error);
+      res.status(500).send("Error retrieving menu items.");
   }
 });
-
-
 
 
 app.get("/truck/:id/page", async (req, res) => {
@@ -209,6 +186,21 @@ app.get("/truck/:id/reviews", async (req, res) => {
   }
 });
 
+app.get("/addTruck", async (req, res) => {
+  try {
+
+   const token = req.cookies?.user?.token || req.headers.authorization?.split(' ')[1];
+    if(!token) {
+     return res.status(401).send("User must be logged in to perform this action.");
+    }
+
+    res.render("addTruck");
+  } catch (error) {
+      console.error("Error loading add truck page:", error);
+      res.status(500).send("Error loading add truck page.");
+  }
+});
+
 // Route to add a new review
 app.post("/truck/:id/addReview", async (req, res) => {
   const truckId = parseInt(req.params.id);
@@ -246,5 +238,50 @@ app.delete("/truck/reviews/:reviewId", async (req, res) => {
   }
 });
 
+// Route to render the 'Add Menu' form for a specific truck
+app.get("/truck/:truckId/menu/add", async (req, res) => {
+  const truckId = parseInt(req.params.truckId); // Get truckId from the URL
+
+  try {
+      // Fetch the truck data for this truck ID (optional for displaying truck name, etc.)
+      const truckData = await trucksService.getTruckById(truckId);
+
+      // Render the addMenu form for this truck
+      res.render("addMenu", {
+          title: `Add Menu Item for ${truckData.truckname}`,
+          truckData, // Pass truck data to the form so we can show the truck name or ID if necessary
+      });
+  } catch (error) {
+      console.error("Error fetching truck data:", error);
+      res.status(500).send("Error retrieving truck data for adding menu item.");
+  }
+});
 
 
+// Route to handle adding a new menu item for a specific truck
+app.post("/truck/:truckId/menu/add", async (req, res) => {
+  const truckId = parseInt(req.params.truckId); // Get truckId from the URL
+  const { foodname, itemprice, allergysource, spicylevel, halal, vegetarian, vegan } = req.body;
+
+  console.log("Request Body:", req.body); // Log the request body to check the incoming data
+
+  try {
+      // Call the menuService to add the menu item to the database
+      await menuService.addMenuItem({
+          truckId,
+          foodName: foodname,
+          itemPrice: parseFloat(itemprice), // Ensure price is stored as a number
+          allergySource: allergysource,
+          spicyLevel: parseInt(spicylevel, 10),
+          halal: halal === 'true',  // Convert string to boolean
+          vegetarian: vegetarian === 'true',
+          vegan: vegan === 'true',
+      });
+
+      // After adding the menu item, redirect to the truck's menu page
+      res.redirect(`/truck/${truckId}/menu`);
+  } catch (error) {
+      console.error("Error adding menu item:", error);
+      res.status(500).send("Error adding menu item.");
+  }
+});
