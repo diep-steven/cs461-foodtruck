@@ -51,7 +51,7 @@ function addTruck() {
     });
 
     console.log(payload);
-    fetch("api/trucks/add", {
+    fetch("/api/trucks/add", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -60,7 +60,7 @@ function addTruck() {
     }).then((response) => {
         if(response.status === 200) {
             console.log("Truck creation successful");
-            window.location.href=`view-foodtrucks`;
+            window.location.href = "view-foodtrucks";
         }
     })
     .catch((error) => {

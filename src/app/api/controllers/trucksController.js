@@ -61,6 +61,7 @@ const addTruck = async (req, res) => {
 
     try {
         await trucksService.addTruck(payload);
+        return res.status(200).send();
     } catch (error) {
         console.log(error);
         return res.status(500).send(error);
